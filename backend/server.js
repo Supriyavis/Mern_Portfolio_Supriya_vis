@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -6,8 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/portfolio");
+// Connect MongoDB using local MongoDB or fallback to default localhost URI
+mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/Portfolio')
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 const MessageSchema = new mongoose.Schema({
   name: String,
